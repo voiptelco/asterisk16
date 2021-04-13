@@ -1,0 +1,38 @@
+// Upgrade Distro
+apt update
+apt list --upgradable
+apt upgrade
+
+// Istall Pre Requeriments
+sudo apt -y install git curl wget libnewt-dev libssl-dev libncurses5-dev subversion  libsqlite3-dev build-essential libjansson-dev libxml2-dev  uuid-dev
+sudo apt -y install subversion
+
+// Download Current Asterisk 16
+cd /usr/src/
+sudo curl -O http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current.tar.gz
+sudo tar xvf asterisk-16-current.tar.gz
+cd asterisk-16*/
+
+// Add MP# support to Asterisk pre Compile
+sudo contrib/scripts/get_mp3_source.sh
+
+// Re Check Pre Requerimentos -- Optional but preferred
+sudo contrib/scripts/install_prereq install
+
+// Install Asterisk
+sudo ./configure
+sudo make menuselect
+sudo make
+sudo make install
+sudo make samples
+sudo make config
+
+// Check Asterisk Console
+sudo systemctl restart asterisk
+sudo systemctl enable asterisk
+systemctl status asterisk
+asterisk -r
+
+// If it doesn't start
+sudo ldconfig
+asterisk -r
