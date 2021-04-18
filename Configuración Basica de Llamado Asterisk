@@ -1,0 +1,90 @@
+#Archivo sip.conf
+
+[general]
+bindport=5060
+bindaddr=0.0.0.0
+;srvlookup=yes
+disallow=all
+;allow=gsm
+allow=ulaw
+allow=alaw
+allow=gsm
+qualify=yes
+canreinvite=no
+dtmfmode=rfc2833
+language=es
+callevents=yes
+;
+
+;=======================ANEXOS===================
+[anexos](!)
+type=friend
+host=dynamic
+context=anexos
+qualify=yes
+secret=20304050
+;
+[anexos2](!)
+type=friend
+host=dynamic
+disallow=all
+allow=alaw
+allow=ulaw
+allow=gsm
+allow=g729
+context=anexos2
+qualify=yes
+secret=20304050
+pickupgroup=1
+callgroup=1
+;call-limit=1
+qualify=yes
+
+[100](anexos2)
+[101](anexos2)
+[102](anexos)
+[103](anexos)
+[104](anexos)
+[105](anexos)
+[106](anexos)
+[107](anexos)
+[108](anexos)
+[109](anexos)
+[110](anexos)
+
+#Archivo Extensions.comf
+
+[general]
+static=yes
+writeprotect=yes
+clearglobalvars=yes
+autofallthrough=yes
+
+;#include extensions_extra.conf
+
+[globals]
+
+TRONCAL=SIP/test1
+PREFIJOFIJO1=9988
+
+[anexos]
+include => not_avail
+
+
+[anexos2]
+include => extensiones
+;include => loc_t1
+;include => ldn_t1
+;include => cel_t1
+include => not_avail
+
+
+[extensiones]
+
+exten => _10X,1,Set(GRUPO=anexos)
+exten => _10X,n,Dial(SIP/${EXTEN},30,jtT)
+
+[not_avail]
+
+exten => _X.,1,Playback(es/conf-errormenu)
+exten => _X.,n,Hangup()
